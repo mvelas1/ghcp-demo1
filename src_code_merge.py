@@ -1,4 +1,5 @@
 import os
+import argparse
 
 def append_source_code_to_file(source_folder, output_file, extensions):
     """
@@ -22,9 +23,18 @@ def append_source_code_to_file(source_folder, output_file, extensions):
                         print(f"Could not read file {file_path}: {e}")
 
 if __name__ == "__main__":
-    # Specify the folder to browse and the output file
-    source_folder = r"c:\path\to\your\folder"  # Change this to your folder path
-    output_file = r"c:\path\to\output\all_source_code.txt"  # Change this to your desired output file path
-    extensions = ('.py', '.js', '.java', '.cpp', '.c', '.cs', '.html', '.css')  # Add or modify extensions as needed
-
-    append_source_code_to_file(source_folder, output_file, extensions)
+    # Parse command-line arguments
+    parser = argparse.ArgumentParser(description="Recursively merge source code files into a single file.")
+    parser.add_argument("--input_folder", required=True, help="The folder to browse for source code files.")
+    parser.add_argument("--output_file", required=True, help="The file where all source code will be appended.")
+    parser.add_argument(
+        "--extensions",
+        nargs="+",
+        default=['.py'],
+        help="List of file extensions to include (default: .py)."
+    )
+    args = parser.parse_args()
+    #print("The source file path is: ", args.input_folder)
+    #print("The output file path is: ", args.output_file)
+    # Call the function with parsed arguments
+    append_source_code_to_file(args.input_folder, args.output_file, tuple(args.extensions))
